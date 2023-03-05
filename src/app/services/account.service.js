@@ -19,11 +19,9 @@ const accountService = {
   },
   find: async () => {
     try {
-      return AccountModel.find()
-        .populate('roleId')
-        .select(
-          '_id email roleId name avatar phone detail_address createdAt isActive'
-        )
+      return AccountModel.find().select(
+        '_id email roleId name avatar phone detail_address createdAt isActive'
+      )
     } catch (error) {
       return error
     }

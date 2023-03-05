@@ -26,7 +26,7 @@ app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 // use routes
-app.use('/auth', authRoute)
+app.use('/', authRoute)
 
 server.listen(PORT, (req, res) => {
   console.log(`listening http://localhost:${PORT}`)

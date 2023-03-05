@@ -13,7 +13,7 @@ const authHelper = {
   checkEmail: async email => {
     const user = await AccountModel.findOne({
       email: email
-    }).populate('roleId')
+    })
     if (!user) {
       return false
     }
