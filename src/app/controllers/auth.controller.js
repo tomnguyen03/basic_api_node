@@ -18,6 +18,15 @@ const AuthController = {
           .json({ message: 'Email đã tồn tại', key: 'email' })
       }
 
+      const isExistUsername = await accountService.findOne({
+        username: req.body.username
+      })
+      if (isExistUsername) {
+        return res
+          .status(403)
+          .json({ message: 'Username đã tồn tại', key: 'username' })
+      }
+
       req.body.password = authHelper.hashedPassword(req.body.password)
       await accountService.createOne({ ...req.body, isActive: true })
       const user = await accountModel.findOne({
