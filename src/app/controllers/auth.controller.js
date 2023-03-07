@@ -15,16 +15,17 @@ const AuthController = {
       if (isExistEmail) {
         return res
           .status(403)
-          .json({ message: 'Email đã tồn tại', key: 'email' })
+          .json({ message: 'Email already exists', key: 'email' })
       }
 
       const isExistUsername = await accountService.findOne({
         username: req.body.username
       })
       if (isExistUsername) {
-        return res
-          .status(403)
-          .json({ message: 'Username đã tồn tại', key: 'username' })
+        return res.status(403).json({
+          message: 'Username already exists',
+          key: 'username'
+        })
       }
 
       req.body.password = authHelper.hashedPassword(req.body.password)
@@ -48,12 +49,10 @@ const AuthController = {
     try {
       const loginResult = await authHelper.login(req, res)
       if (!loginResult) {
-        throw new Error('Sai tài khoản hoặc mật khẩu')
+        throw new Error('Invalid account or password')
       }
       if (loginResult.isActive === false) {
-        return res
-          .status(405)
-          .json({ message: 'Tài khoản đã bị khóa' })
+        return res.status(405).json({ message: 'Account is blocked' })
       }
 
       return res.json({ message: 'Successfully', data: loginResult })

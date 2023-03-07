@@ -60,7 +60,7 @@ const authHelper = {
       const token = authHelper.createToken(payload)
       const refreshToken = authHelper.createRefreshToken(payload)
 
-      let { password, ...other } = user._doc
+      let { password, __v, ...other } = user._doc
       const res_data = { ...other, token, refreshToken }
       return res_data
     }
