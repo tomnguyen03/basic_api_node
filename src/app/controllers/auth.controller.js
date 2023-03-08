@@ -61,7 +61,7 @@ const AuthController = {
         .status(403)
         .json({ message: error.message, data: error })
     }
-  }
+  },
 
   // update: async (req, res) => {
   //   const form = formidable({ multiples: true })
@@ -115,18 +115,26 @@ const AuthController = {
   //   }
   // },
 
-  // getAllUser: async (req, res) => {
-  //   try {
-  //     const data = await accountService.find()
+  getUser: async (req, res) => {
+    try {
+      const limit = req.query.limit
+      const page = req.query.page
 
-  //     return res.status(200).json({
-  //       message: 'Successfully',
-  //       data: data
-  //     })
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
+      const data = await accountService.find({ limit, page })
+      const meta = {
+        totalPage: await accountService.count(),
+        page: page,
+        limit: limit
+      }
+      return res.status(200).json({
+        message: 'Successfully',
+        data: data,
+        meta
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   // updateAccountActive: async (req, res) => {
   //   try {

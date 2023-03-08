@@ -74,7 +74,7 @@ const authMiddleware = {
 
   isUser: (req, res, next) => {
     authMiddleware.verifyToken(req, res, () => {
-      if (req.user.roleId.name === ROLE.USER) {
+      if (req.user) {
         next()
       } else
         return res

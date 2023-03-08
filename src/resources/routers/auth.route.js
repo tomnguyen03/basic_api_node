@@ -5,6 +5,7 @@ const authMiddleware = require('../middleware/auth.middleware')
 
 route.post('/register', controller.registerUser)
 route.post('/login', controller.login)
+route.get('/users', authMiddleware.isUser, controller.getUser)
 // route.put('/update', authMiddleware.isOptionLogin, controller.update)
 // route.put(
 //   '/change-password',

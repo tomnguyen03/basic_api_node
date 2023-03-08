@@ -17,14 +17,27 @@ const accountService = {
       return error
     }
   },
-  find: async () => {
+  find: async data => {
     try {
-      return AccountModel.find().select(
-        '_id email roleId name avatar phone detail_address createdAt isActive'
-      )
+      if (data) {
+        let { limit, page, ...query } = data
+        limit = Number.parseInt(limit) || 10
+        let skip = (Number.parseInt(page) - 1) * limit || 0
+
+        return AccountModel.find(query)
+          .select(
+            '_id email name avatar phone detail_address createdAt isActive'
+          )
+          .limit(limit)
+          .skip(skip)
+          .lean()
+      }
     } catch (error) {
       return error
     }
+  },
+  count: async () => {
+    return AccountModel.count()
   },
   changePassword: async (userId, data) => {
     try {
