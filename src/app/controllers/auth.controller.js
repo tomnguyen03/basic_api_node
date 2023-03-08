@@ -117,8 +117,8 @@ const AuthController = {
 
   getUser: async (req, res) => {
     try {
-      const limit = req.query.limit
-      const page = req.query.page
+      const limit = req.query.limit || 10
+      const page = req.query.page || 1
 
       const data = await accountService.find({ limit, page })
       const meta = {
