@@ -117,14 +117,16 @@ const AuthController = {
 
   getUser: async (req, res) => {
     try {
-      const limit = req.query.limit || 10
-      const page = req.query.page || 1
+      const totalItem = await accountService.count()
+      const limit = Number.parseInt(req.query.limit) || 10
+      const page = Number.parseInt(req.query.page) || 1
 
       const data = await accountService.find({ limit, page })
       const meta = {
-        totalPage: await accountService.count(),
-        page: page,
-        limit: limit
+        totalItem,
+        totalPage: Math.ceil(totalItem / limit),
+        page,
+        limit
       }
       return res.status(200).json({
         message: 'Successfully',
