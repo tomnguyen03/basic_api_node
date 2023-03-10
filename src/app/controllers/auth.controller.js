@@ -1,7 +1,9 @@
+const formidable = require('formidable')
+const lodash = require('lodash')
 const accountService = require('../services/account.service')
 const authHelper = require('../../helpers/auth.helper')
-const { ROLE } = require('../../constants/role.constant')
 const accountModel = require('../models/account.model')
+const uploader = require('../../config/cloudinary/cloudinary.config')
 
 const AuthController = {
   registerUser: async (req, res) => {
@@ -63,40 +65,40 @@ const AuthController = {
     }
   },
 
-  // update: async (req, res) => {
-  //   const form = formidable({ multiples: true })
+  update: async (req, res) => {
+    const form = formidable({ multiples: true })
 
-  //   form.parse(req, async (err, fields, files) => {
-  //     if (err) {
-  //       next(err)
-  //       return
-  //     }
-  //     try {
-  //       const accountId = req.user._id
-  //       let data = {}
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        next(err)
+        return
+      }
+      try {
+        const accountId = req.user._id
+        let data = {}
 
-  //       if (!lodash.isEmpty(files.avatar)) {
-  //         const filepath = files.avatar.filepath
-  //         const { url } = await uploader(filepath)
-  //         data = { ...fields, avatar: url }
-  //       } else {
-  //         data = { ...fields }
-  //       }
-  //       await accountService.update(accountId, data)
-  //       const dataAfterUpdate = await accountService.findOne({
-  //         _id: accountId
-  //       })
-  //       const { password, ...result } = dataAfterUpdate._doc
-  //       return res
-  //         .status(200)
-  //         .json({ message: 'Successfully', data: result })
-  //     } catch (error) {
-  //       return res
-  //         .status(400)
-  //         .json({ message: error.message, data: error })
-  //     }
-  //   })
-  // },
+        if (!lodash.isEmpty(files.avatar)) {
+          const filepath = files.avatar.filepath
+          const { url } = await uploader(filepath)
+          data = { ...fields, avatar: url }
+        } else {
+          data = { ...fields }
+        }
+        await accountService.update(accountId, data)
+        const dataAfterUpdate = await accountService.findOne({
+          _id: accountId
+        })
+        const { password, ...result } = dataAfterUpdate._doc
+        return res
+          .status(200)
+          .json({ message: 'Successfully', data: result })
+      } catch (error) {
+        return res
+          .status(400)
+          .json({ message: error.message, data: error })
+      }
+    })
+  },
 
   // changePassword: async (req, res) => {
   //   try {

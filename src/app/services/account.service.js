@@ -46,6 +46,13 @@ const accountService = {
     } catch (error) {
       throw new Error(error)
     }
+  },
+  update: async (id, data) => {
+    try {
+      return AccountModel.updateOne({ _id: id }, data)
+    } catch (error) {
+      return error
+    }
   }
 }
 
