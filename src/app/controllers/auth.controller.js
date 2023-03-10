@@ -77,12 +77,19 @@ const AuthController = {
         const accountId = req.user._id
         let data = {}
 
+        const dataFields = {
+          name: fields.name,
+          phone: fields.phone,
+          detail_address: fields.detail_address,
+          birthday: fields.birthday
+        }
+
         if (!lodash.isEmpty(files.avatar)) {
           const filepath = files.avatar.filepath
           const { url } = await uploader(filepath)
-          data = { ...fields, avatar: url }
+          data = { ...dataFields, avatar: url }
         } else {
-          data = { ...fields }
+          data = { ...dataFields }
         }
         await accountService.update(accountId, data)
         const dataAfterUpdate = await accountService.findOne({
