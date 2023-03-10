@@ -80,7 +80,7 @@ const AuthController = {
         const dataFields = {
           name: fields.name,
           phone: fields.phone,
-          detail_address: fields.detail_address,
+          address: fields.address,
           birthday: fields.birthday
         }
 

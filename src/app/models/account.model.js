@@ -36,7 +36,7 @@ const Account = new Schema(
       type: Date,
       required: false
     },
-    detail_address: {
+    address: {
       type: String,
       required: false
     },
