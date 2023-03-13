@@ -98,20 +98,20 @@ const authHelper = {
 
   changePassword: async (userId, data) => {
     try {
-      const { current_password, new_password } = data
+      const { currentPassword, newPassword } = data
       let user = await AccountModel.findOne({ _id: userId })
       if (!user) {
         throw new Error('User is not found')
       }
 
       const inValidPassword = authHelper.checkPassword(
-        current_password,
+        currentPassword,
         user.password
       )
       if (!inValidPassword) {
         throw new Error('Invalid old password')
       }
-      const hashPassword = authHelper.hashedPassword(new_password)
+      const hashPassword = authHelper.hashedPassword(newPassword)
 
       user = await AccountModel.findOneAndUpdate(
         { _id: userId },

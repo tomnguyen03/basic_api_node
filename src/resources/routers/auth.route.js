@@ -7,11 +7,16 @@ route.post('/register', controller.registerUser)
 route.post('/login', controller.login)
 route.get('/users', authMiddleware.isUser, controller.getUser)
 route.put('/update', authMiddleware.isUser, controller.update)
-// route.put(
-//   '/change-password',
-//   authMiddleware.isOptionLogin,
-//   controller.changePassword
-// )
+route.get(
+  '/myAccount',
+  authMiddleware.isUser,
+  controller.getMyAccount
+)
+route.put(
+  '/change-password',
+  authMiddleware.isUser,
+  controller.changePassword
+)
 // route.get(
 //   '/statistical',
 //   authMiddleware.isAdmin,

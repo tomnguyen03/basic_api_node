@@ -107,22 +107,43 @@ const AuthController = {
     })
   },
 
-  // changePassword: async (req, res) => {
-  //   try {
-  //     const userId = req.user._id
-  //     const user = await accountService.changePassword(
-  //       userId,
-  //       req.body
-  //     )
-  //     return res
-  //       .status(200)
-  //       .json({ message: 'Successfully', result: user })
-  //   } catch (error) {
-  //     return res
-  //       .status(400)
-  //       .json({ message: error.message, data: error })
-  //   }
-  // },
+  getMyAccount: async (req, res) => {
+    try {
+      const accountId = req.user._id
+
+      const response = await accountService.findOne({
+        _id: accountId
+      })
+
+      let { password, __v, ...data } = response._doc
+
+      return res.status(200).json({
+        message: 'Successfully',
+        data
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
+  changePassword: async (req, res) => {
+    try {
+      const userId = req.user._id
+      const response = await accountService.changePassword(
+        userId,
+        req.body
+      )
+
+      let { password, __v, ...data } = response._doc
+      return res
+        .status(200)
+        .json({ message: 'Successfully', data: data })
+    } catch (error) {
+      return res
+        .status(400)
+        .json({ message: error.message, data: error })
+    }
+  },
 
   getUser: async (req, res) => {
     try {
@@ -171,19 +192,6 @@ const AuthController = {
 
   //     return res.status(200).json({
   //       message: 'Successfully'
-  //     })
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // },
-
-  // getRole: async (_, res) => {
-  //   try {
-  //     const role = await roleService.getRole()
-
-  //     return res.status(200).json({
-  //       message: 'Successfully',
-  //       data: role
   //     })
   //   } catch (error) {
   //     console.log(error)
