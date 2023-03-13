@@ -8,7 +8,7 @@ route.post('/login', controller.login)
 route.get('/users', authMiddleware.isUser, controller.getUser)
 route.put('/update', authMiddleware.isUser, controller.update)
 route.get(
-  '/myAccount',
+  '/my-account',
   authMiddleware.isUser,
   controller.getMyAccount
 )
