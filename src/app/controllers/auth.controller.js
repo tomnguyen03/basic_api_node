@@ -101,7 +101,7 @@ const AuthController = {
           .json({ message: 'Successfully', data: result })
       } catch (error) {
         return res
-          .status(400)
+          .status(403)
           .json({ message: error.message, data: error })
       }
     })
