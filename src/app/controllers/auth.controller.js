@@ -65,7 +65,7 @@ const AuthController = {
     }
   },
 
-  update: async (req, res) => {
+  update: async (req, res, next) => {
     const form = formidable({ multiples: true })
 
     form.parse(req, async (err, fields, files) => {
