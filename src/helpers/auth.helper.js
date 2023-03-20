@@ -1,6 +1,7 @@
 const AccountModel = require('../app/models/account.model')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const validateHelper = require('../helpers/validate.helper')
 
 const authHelper = {
   hashedPassword: password => {
@@ -123,8 +124,11 @@ const authHelper = {
           'New password and confirm password does not match'
         )
       }
-
-      const hashPassword = authHelper.hashedPassword(newPassword)
+      if (!validateHelper.password(newPassword)) {
+        throw new Error(
+          'Password must be 6-16 characters long, and contain at least one uppercase, lowercase, number, symbols.'
+        )
+      }
 
       user = await AccountModel.findOneAndUpdate(
         { _id: userId },
