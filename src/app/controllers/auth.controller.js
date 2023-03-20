@@ -4,6 +4,7 @@ const accountService = require('../services/account.service')
 const authHelper = require('../../helpers/auth.helper')
 const accountModel = require('../models/account.model')
 const uploader = require('../../config/cloudinary/cloudinary.config')
+const validateHelper = require('../../helpers/validate.helper')
 
 const AuthController = {
   registerUser: async (req, res) => {
@@ -30,7 +31,25 @@ const AuthController = {
         })
       }
 
-      req.body.password = authHelper.hashedPassword(req.body.password)
+      if (validateHelper.password(req.body.password)) {
+        req.body.password = authHelper.hashedPassword(
+          req.body.password
+        )
+      } else {
+        return res.status(403).json({
+          message:
+            'Password must be 6-16 characters long, and contain at least one uppercase, lowercase, number, symbols.',
+          key: 'password'
+        })
+      }
+
+      if (!validateHelper.email(req.body.email)) {
+        return res.status(403).json({
+          message: 'Email invalidate',
+          key: 'email'
+        })
+      }
+
       await accountService.createOne({ ...req.body, isActive: true })
       const user = await accountModel.findOne({
         email: req.body.email
@@ -57,6 +76,13 @@ const AuthController = {
         return res.status(405).json({ message: 'Account is blocked' })
       }
 
+      if (!validateHelper.email(req.body.email)) {
+        return res.status(403).json({
+          message: 'Email invalidate',
+          key: 'email'
+        })
+      }
+
       return res.json({ message: 'Successfully', data: loginResult })
     } catch (error) {
       return res
@@ -76,6 +102,13 @@ const AuthController = {
       try {
         const accountId = req.user._id
         let data = {}
+
+        if (!validateHelper.phone(fields.phone)) {
+          return res.status(403).json({
+            message: 'Phone invalidate',
+            key: 'phone'
+          })
+        }
 
         const dataFields = {
           name: fields.name,
