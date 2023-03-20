@@ -99,37 +99,6 @@ const authHelper = {
 
   changePassword: async (userId, data) => {
     try {
-      const { currentPassword, newPassword, confirmPassword } = data
-      let user = await AccountModel.findOne({ _id: userId })
-      if (!user) {
-        throw new Error('User is not found')
-      }
-
-      const inValidPassword = authHelper.checkPassword(
-        currentPassword,
-        user.password
-      )
-      if (!inValidPassword) {
-        throw new Error('Invalid old password')
-      }
-
-      if (currentPassword === newPassword) {
-        throw new Error(
-          'Current password and new password must not be the same'
-        )
-      }
-
-      if (newPassword !== confirmPassword) {
-        throw new Error(
-          'New password and confirm password does not match'
-        )
-      }
-      if (!validateHelper.password(newPassword)) {
-        throw new Error(
-          'Password must be 6-16 characters long, and contain at least one uppercase, lowercase, number, symbols.'
-        )
-      }
-
       user = await AccountModel.findOneAndUpdate(
         { _id: userId },
         { password: hashPassword },
