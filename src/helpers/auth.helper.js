@@ -104,12 +104,6 @@ const authHelper = {
         throw new Error('User is not found')
       }
 
-      if (newPassword !== confirmPassword) {
-        throw new Error(
-          'New password and confirm password does not match'
-        )
-      }
-
       const inValidPassword = authHelper.checkPassword(
         currentPassword,
         user.password
@@ -117,6 +111,19 @@ const authHelper = {
       if (!inValidPassword) {
         throw new Error('Invalid old password')
       }
+
+      if (currentPassword === newPassword) {
+        throw new Error(
+          'Current password and new password must not be the same'
+        )
+      }
+
+      if (newPassword !== confirmPassword) {
+        throw new Error(
+          'New password and confirm password does not match'
+        )
+      }
+
       const hashPassword = authHelper.hashedPassword(newPassword)
 
       user = await AccountModel.findOneAndUpdate(
