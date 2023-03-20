@@ -41,8 +41,11 @@ const accountService = {
   },
   changePassword: async (userId, data) => {
     try {
-      const user = authHelper.changePassword(userId, data)
-      return user
+      return AccountModel.findOneAndUpdate(
+        { _id: userId },
+        { password: authHelper.hashedPassword(data.newPassword) },
+        { new: true }
+      )
     } catch (error) {
       throw new Error(error)
     }

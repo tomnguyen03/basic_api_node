@@ -12,6 +12,14 @@ const AuthController = {
       if (!req.body) {
         throw new Error('Invalid Input value')
       }
+
+      if (!validateHelper.email(req.body.email)) {
+        return res.status(403).json({
+          message: 'Email invalidate',
+          key: 'email'
+        })
+      }
+
       const isExistEmail = await accountService.findOne({
         email: req.body.email
       })
@@ -40,13 +48,6 @@ const AuthController = {
           message:
             'Password must be 6-16 characters long, and contain at least one uppercase, lowercase, number, symbols.',
           key: 'password'
-        })
-      }
-
-      if (!validateHelper.email(req.body.email)) {
-        return res.status(403).json({
-          message: 'Email invalidate',
-          key: 'email'
         })
       }
 
@@ -103,7 +104,7 @@ const AuthController = {
         const accountId = req.user._id
         let data = {}
 
-        if (!validateHelper.phone(fields.phone)) {
+        if (fields.phone && !validateHelper.phone(fields.phone)) {
           return res.status(403).json({
             message: 'Phone invalidate',
             key: 'phone'
@@ -162,6 +163,57 @@ const AuthController = {
   changePassword: async (req, res) => {
     try {
       const userId = req.user._id
+
+      let user = await accountModel.findOne({ _id: userId })
+
+      const { currentPassword, newPassword, confirmPassword } =
+        req.body
+
+      //Check user
+      if (!user) {
+        return res.status(403).json({
+          message: 'User is not found'
+        })
+      }
+
+      //Check invalid password
+      const inValidPassword = authHelper.checkPassword(
+        currentPassword,
+        user.password
+      )
+      if (!inValidPassword) {
+        return res.status(403).json({
+          message: 'Invalid old password',
+          key: 'currentPassword'
+        })
+      }
+
+      //Check compare pw and new pw
+      if (currentPassword === newPassword) {
+        return res.status(403).json({
+          message:
+            'Current password and new password must not be the same',
+          key: 'newPassword'
+        })
+      }
+
+      //Check compare new pw and confirm pw
+      if (newPassword !== confirmPassword) {
+        return res.status(403).json({
+          message: 'New password and confirm password does not match',
+          key: 'confirmPassword'
+        })
+      }
+
+      //Check regex new pw
+      if (!validateHelper.password(newPassword)) {
+        return res.status(403).json({
+          message:
+            'Password must be 6-16 characters long, and contain at least one uppercase, lowercase, number, symbols.',
+          key: 'newPassword'
+        })
+      }
+
       const response = await accountService.changePassword(
         userId,
         req.body
