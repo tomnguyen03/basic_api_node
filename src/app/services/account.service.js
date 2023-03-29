@@ -12,7 +12,9 @@ const accountService = {
   },
   findOne: async data => {
     try {
-      return AccountModel.findOne(data)
+      return AccountModel.findOne(data).select(
+        '_id email username name avatar phone detail_address createdAt isActive'
+      )
     } catch (error) {
       return error
     }
@@ -26,9 +28,7 @@ const accountService = {
 
         if (searchName) {
           return AccountModel.find({ name: searchName })
-            .select(
-              '_id email username name avatar phone detail_address createdAt isActive'
-            )
+            .select('_id name')
             .limit(limit)
             .skip(skip)
         } else {
