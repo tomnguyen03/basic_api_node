@@ -6,6 +6,11 @@ const authMiddleware = require('../middleware/auth.middleware')
 route.post('/register', controller.registerUser)
 route.post('/login', controller.login)
 route.get('/users', authMiddleware.isUser, controller.getUser)
+route.get(
+  '/user/:id',
+  authMiddleware.isUser,
+  controller.getDetailUser
+)
 route.put('/update', authMiddleware.isUser, controller.update)
 route.get(
   '/my-account',

@@ -268,6 +268,21 @@ const AuthController = {
     } catch (error) {
       console.log(error)
     }
+  },
+
+  getDetailUser: async (req, res) => {
+    try {
+      const id = req.params.id
+
+      const data = await accountService.findOne({ _id: id })
+
+      return res.status(200).json({
+        message: 'Successfully',
+        data: data
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   // updateAccountActive: async (req, res) => {
