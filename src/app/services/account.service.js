@@ -20,24 +20,32 @@ const accountService = {
   find: async data => {
     try {
       if (data) {
-        let { limit, page, ...query } = data
+        let { limit, page, searchName } = data
         limit = Number.parseInt(limit) || 10
         let skip = (Number.parseInt(page) - 1) * limit || 0
 
-        return AccountModel.find(query)
-          .select(
-            '_id email name avatar phone detail_address createdAt isActive'
-          )
-          .limit(limit)
-          .skip(skip)
-          .lean()
+        if (searchName) {
+          return AccountModel.find({ name: searchName })
+            .select(
+              '_id email username name avatar phone detail_address createdAt isActive'
+            )
+            .limit(limit)
+            .skip(skip)
+        } else {
+          return AccountModel.find()
+            .select(
+              '_id email username name avatar phone detail_address createdAt isActive'
+            )
+            .limit(limit)
+            .skip(skip)
+        }
       }
     } catch (error) {
       return error
     }
   },
-  count: async () => {
-    return AccountModel.count()
+  count: async query => {
+    return AccountModel.count(query)
   },
   changePassword: async (userId, data) => {
     try {
