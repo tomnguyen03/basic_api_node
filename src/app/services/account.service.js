@@ -22,23 +22,16 @@ const accountService = {
   find: async data => {
     try {
       if (data) {
-        let { limit, page, searchName } = data
+        let { limit, page } = data
         limit = Number.parseInt(limit) || 10
         let skip = (Number.parseInt(page) - 1) * limit || 0
 
-        if (searchName) {
-          return AccountModel.find({ name: searchName })
-            .select('_id name')
-            .limit(limit)
-            .skip(skip)
-        } else {
-          return AccountModel.find()
-            .select(
-              '_id email username name avatar phone address createdAt isActive'
-            )
-            .limit(limit)
-            .skip(skip)
-        }
+        return AccountModel.find()
+          .select(
+            '_id email username name avatar phone address createdAt isActive'
+          )
+          .limit(limit)
+          .skip(skip)
       }
     } catch (error) {
       return error
