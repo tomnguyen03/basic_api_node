@@ -232,38 +232,17 @@ const AuthController = {
 
   getUser: async (req, res) => {
     try {
-      const limit = Number.parseInt(req.query.limit) || 10
-      const page = Number.parseInt(req.query.page) || 1
-
       let searchName
       if (!lodash.isEmpty(req.query.search))
         searchName = new RegExp(req.query.search, 'i')
 
-      const data = await accountService.find({
-        limit,
-        page,
+      const data = await accountService.search({
         searchName
       })
 
-      let totalItem
-      if (!lodash.isEmpty(req.query.search)) {
-        totalItem = await accountService.count({
-          name: searchName
-        })
-      } else {
-        totalItem = await accountService.count()
-      }
-
-      const meta = {
-        totalItem,
-        totalPage: Math.ceil(totalItem / limit),
-        page,
-        limit
-      }
       return res.status(200).json({
         message: 'Successfully',
-        data: data,
-        meta
+        data: data
       })
     } catch (error) {
       console.log(error)
