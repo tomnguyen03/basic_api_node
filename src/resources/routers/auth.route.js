@@ -22,6 +22,7 @@ route.put(
   authMiddleware.isUser,
   controller.changePassword
 )
+route.get('/search', authMiddleware.isUser, controller.getListSearch)
 // route.get(
 //   '/statistical',
 //   authMiddleware.isAdmin,
