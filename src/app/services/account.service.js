@@ -44,6 +44,21 @@ const accountService = {
       return error
     }
   },
+  search: async data => {
+    try {
+      if (data) {
+        let { searchName } = data
+
+        if (searchName) {
+          return AccountModel.find({ name: searchName }).select(
+            '_id name'
+          )
+        }
+      }
+    } catch (error) {
+      return error
+    }
+  },
   count: async query => {
     return AccountModel.count(query)
   },
