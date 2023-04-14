@@ -11,6 +11,14 @@ const todoListService = {
     }
   },
 
+  getDetailItem: async id => {
+    try {
+      return TodoListModel.findOne({ _id: id })
+    } catch (error) {
+      return error
+    }
+  },
+
   findByUserId: async id => {
     try {
       if (id) {
@@ -34,6 +42,23 @@ const todoListService = {
             { title }
           ).select('_id title isCompleted')
         }
+      }
+    } catch (error) {
+      return error
+    }
+  },
+
+  updateComplete: async data => {
+    try {
+      if (data) {
+        let { id } = data
+
+        const dataItem = await todoListService.getDetailItem(id)
+
+        return TodoListModel.updateOne(
+          { _id: id },
+          { isCompleted: !dataItem._doc.isCompleted }
+        )
       }
     } catch (error) {
       return error
