@@ -13,6 +13,7 @@ const authMiddleware = require('./resources/middleware/auth.middleware')
 
 // import routes
 const authRoute = require('./resources/routers/auth.route')
+const todolistRoute = require('./resources/routers/todolist.route')
 
 dotenv.config()
 
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 
 // use routes
 app.use('/', authRoute)
+app.use('/todo', authMiddleware.isUser, todolistRoute)
 
 server.listen(PORT, (req, res) => {
   console.log(`listening http://localhost:${PORT}`)
