@@ -55,6 +55,21 @@ const TodoListController = {
     }
   },
 
+  updateCompleteItem: async (req, res) => {
+    try {
+      await TodoListService.updateComplete({
+        id: req.body.id
+      })
+
+      return res.status(200).json({
+        message: 'Successfully',
+        data: {}
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
   deleteItem: async (req, res) => {
     try {
       await TodoListService.delete(req.body.id)
