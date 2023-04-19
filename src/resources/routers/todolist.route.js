@@ -14,6 +14,8 @@ route.delete('/deleteCompletedItem', controller.deleteCompleteItem)
 
 route.put('/setCompleteAllItem', controller.setCompleteAllItem)
 
+route.get('/itemLeft', controller.getItemLeft)
+
 route.delete('/:id', controller.deleteItem)
 
 module.exports = route

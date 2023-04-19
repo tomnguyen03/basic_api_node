@@ -126,6 +126,19 @@ const TodoListController = {
     } catch (error) {
       console.log(error)
     }
+  },
+
+  getItemLeft: async (req, res) => {
+    try {
+      const data = await TodoListService.getItemLeft(req.user._id)
+
+      return res.status(200).json({
+        message: 'Successfully',
+        data
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 

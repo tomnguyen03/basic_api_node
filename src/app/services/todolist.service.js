@@ -104,6 +104,17 @@ const todoListService = {
     } catch (error) {
       return error
     }
+  },
+
+  getItemLeft: async userId => {
+    try {
+      return TodoListModel.count({
+        userId: userId,
+        isCompleted: false
+      })
+    } catch (error) {
+      return error
+    }
   }
 }
 
