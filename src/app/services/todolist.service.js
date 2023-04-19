@@ -34,11 +34,11 @@ const todoListService = {
   update: async data => {
     try {
       if (data) {
-        let { id, title } = data
+        let { id, title, userId } = data
 
         if (title) {
           return TodoListModel.updateOne(
-            { _id: id },
+            { _id: id, userId },
             { title }
           ).select('_id title isCompleted')
         }
@@ -51,12 +51,12 @@ const todoListService = {
   updateComplete: async data => {
     try {
       if (data) {
-        let { id } = data
+        let { id, userId } = data
 
         const dataItem = await todoListService.getDetailItem(id)
 
         return TodoListModel.updateOne(
-          { _id: id },
+          { _id: id, userId: userId },
           { isCompleted: !dataItem._doc.isCompleted }
         )
       }
@@ -65,9 +65,42 @@ const todoListService = {
     }
   },
 
-  delete: async id => {
+  delete: async (id, userId) => {
     try {
-      return TodoListModel.deleteOne({ _id: id })
+      return TodoListModel.deleteOne({ _id: id, userId: userId })
+    } catch (error) {
+      return error
+    }
+  },
+
+  deleteMany: async userId => {
+    try {
+      return TodoListModel.deleteMany({
+        userId: userId,
+        isCompleted: true
+      })
+    } catch (error) {
+      return error
+    }
+  },
+
+  setCompleteAllItem: async userId => {
+    try {
+      const todoList = await todoListService.findByUserId(userId)
+
+      if (todoList.some(item => item.isCompleted === false)) {
+        return TodoListModel.updateMany(
+          { userId: userId },
+          { isCompleted: true }
+        )
+      }
+
+      if (todoList.every(item => item.isCompleted === true)) {
+        return TodoListModel.updateMany(
+          { userId: userId },
+          { isCompleted: false }
+        )
+      }
     } catch (error) {
       return error
     }

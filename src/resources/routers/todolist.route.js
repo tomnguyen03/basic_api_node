@@ -10,6 +10,10 @@ route.put('/title', controller.updateTodoItem)
 
 route.put('/complete', controller.updateCompleteItem)
 
+route.delete('/deleteCompletedItem', controller.deleteCompleteItem)
+
+route.put('/setCompleteAllItem', controller.setCompleteAllItem)
+
 route.delete('/:id', controller.deleteItem)
 
 module.exports = route

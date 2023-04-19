@@ -30,10 +30,27 @@ const TodoListController = {
 
       const response = await TodoListService.findByUserId(accountId)
 
-      return res.status(200).json({
-        message: 'Successfully',
-        data: response
-      })
+      const filter = req.query.filter
+
+      if (filter) {
+        if (filter === 'active') {
+          data = response.filter(item => !item.isCompleted)
+        }
+
+        if (filter === 'completed') {
+          data = response.filter(item => item.isCompleted)
+        }
+
+        return res.status(200).json({
+          message: 'Successfully',
+          data
+        })
+      } else {
+        return res.status(200).json({
+          message: 'Successfully',
+          data: response
+        })
+      }
     } catch (error) {
       console.log(error)
     }
@@ -43,7 +60,8 @@ const TodoListController = {
     try {
       await TodoListService.update({
         id: req.body.id,
-        title: req.body.title
+        title: req.body.title,
+        userId: req.user._id
       })
 
       return res.status(200).json({
@@ -58,7 +76,8 @@ const TodoListController = {
   updateCompleteItem: async (req, res) => {
     try {
       await TodoListService.updateComplete({
-        id: req.body.id
+        id: req.body.id,
+        userId: req.user._id
       })
 
       return res.status(200).json({
@@ -72,7 +91,33 @@ const TodoListController = {
 
   deleteItem: async (req, res) => {
     try {
-      await TodoListService.delete(req.params.id)
+      await TodoListService.delete(req.params.id, req.user._id)
+
+      return res.status(200).json({
+        message: 'Successfully',
+        data: {}
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
+  deleteCompleteItem: async (req, res) => {
+    try {
+      await TodoListService.deleteMany(req.user._id)
+
+      return res.status(200).json({
+        message: 'Successfully',
+        data: {}
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
+  setCompleteAllItem: async (req, res) => {
+    try {
+      await TodoListService.setCompleteAllItem(req.user._id)
 
       return res.status(200).json({
         message: 'Successfully',
