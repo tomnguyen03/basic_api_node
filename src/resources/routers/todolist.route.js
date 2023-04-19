@@ -10,6 +10,6 @@ route.put('/title', controller.updateTodoItem)
 
 route.put('/complete', controller.updateCompleteItem)
 
-route.delete('/', controller.deleteItem)
+route.delete('/:id', controller.deleteItem)
 
 module.exports = route

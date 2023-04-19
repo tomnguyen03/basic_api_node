@@ -72,7 +72,7 @@ const TodoListController = {
 
   deleteItem: async (req, res) => {
     try {
-      await TodoListService.delete(req.body.id)
+      await TodoListService.delete(req.params.id)
 
       return res.status(200).json({
         message: 'Successfully',
