@@ -11,18 +11,26 @@ route.get(
   authMiddleware.isUser,
   controller.getDetailUser
 )
-route.put('/update', authMiddleware.isUser, controller.update)
+route.put(
+  '/my-account/update',
+  authMiddleware.isUser,
+  controller.update
+)
 route.get(
   '/my-account',
   authMiddleware.isUser,
   controller.getMyAccount
 )
 route.put(
-  '/change-password',
+  '/my-account/change-password',
   authMiddleware.isUser,
   controller.changePassword
 )
-route.get('/search', authMiddleware.isUser, controller.getListSearch)
+route.get(
+  '/my-account/search',
+  authMiddleware.isUser,
+  controller.getListSearch
+)
 // route.get(
 //   '/statistical',
 //   authMiddleware.isAdmin,
