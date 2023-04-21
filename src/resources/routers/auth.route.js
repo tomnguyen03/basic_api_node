@@ -7,6 +7,11 @@ route.post('/register', controller.registerUser)
 route.post('/login', controller.login)
 route.get('/users', authMiddleware.isUser, controller.getUser)
 route.get(
+  '/users/search',
+  authMiddleware.isUser,
+  controller.getListSearch
+)
+route.get(
   '/user/:id',
   authMiddleware.isUser,
   controller.getDetailUser
@@ -25,11 +30,6 @@ route.put(
   '/my-account/change-password',
   authMiddleware.isUser,
   controller.changePassword
-)
-route.get(
-  '/my-account/search',
-  authMiddleware.isUser,
-  controller.getListSearch
 )
 // route.get(
 //   '/statistical',
