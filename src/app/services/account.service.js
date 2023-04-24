@@ -13,7 +13,7 @@ const accountService = {
   findOne: async data => {
     try {
       return AccountModel.findOne(data).select(
-        '_id email username name avatar phone address createdAt isActive'
+        '_id email username name avatar phone address birthday createdAt isActive'
       )
     } catch (error) {
       return error
@@ -28,7 +28,7 @@ const accountService = {
 
         return AccountModel.find()
           .select(
-            '_id email username name avatar phone address createdAt isActive'
+            '_id email username name avatar phone address birthday createdAt isActive'
           )
           .limit(limit)
           .skip(skip)
